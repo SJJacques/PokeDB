@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   db:
@@ -11,9 +11,10 @@ services:
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppassword
     ports:
-      - "3306:3306"
+      - '3306:3306'
     volumes:
-      - ./PokeDB.Data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./PokeDB.Data/init/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./PokeDB.Data/init/02-seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
       - ./PokeDB.Data/mysql:/var/lib/mysql # persist data by mounting volume
 
   server:
@@ -28,7 +29,7 @@ services:
       - DB_PASSWORD=apppassword
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - "5000:80" #Host:Container
+      - '5000:80' #Host:Container
 
   client:
     build: ./PokeDB.Client
@@ -38,4 +39,4 @@ services:
     environment:
       - VITE_API_URL=http://localhost:5000
     ports:
-      - "3000:80"
+      - '3000:80'

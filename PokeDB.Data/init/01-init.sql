@@ -1,0 +1,43 @@
+CREATE DATABASE IF NOT EXISTS PokemonDB;
+USE PokemonDB;
+
+CREATE TABLE IF NOT EXISTS Types (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    TypeName VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS Abilities (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    AbilityName VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS Moves (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    MoveName VARCHAR(100) NOT NULL UNIQUE,
+    AttackPower INT NOT NULL,
+    Accuracy INT NOT NULL,
+    TypeId INT NOT NULL,
+    FOREIGN KEY (TypeId) REFERENCES Types(Id)
+);
+
+CREATE TABLE IF NOT EXISTS Pokemon (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    PokemonName VARCHAR(100) NOT NULL UNIQUE,
+    BaseHp INT NOT NULL,
+    BaseAttack INT NOT NULL,
+    BaseDefense INT NOT NULL,
+    TypeId INT NOT NULL,
+    AbilityId INT NOT NULL,
+    PreviousEvolutionId INT NULL,
+    FOREIGN KEY (TypeId) REFERENCES Types(Id),
+    FOREIGN KEY (AbilityId) REFERENCES Abilities(Id),
+    FOREIGN KEY (PreviousEvolutionId) REFERENCES Pokemon(Id)
+);
+
+CREATE TABLE IF NOT EXISTS PokemonMoves (
+    PokemonId INT,
+    MoveId INT,
+    PRIMARY KEY (PokemonId, MoveId),
+    FOREIGN KEY (PokemonId) REFERENCES Pokemon(Id),
+    FOREIGN KEY (MoveId) REFERENCES Moves(Id)
+);
